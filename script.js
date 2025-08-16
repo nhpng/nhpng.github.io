@@ -10,3 +10,28 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   }
 });
+
+// Replace with the actual URL of your backend!
+const COUNTER_API = "https://your-backend-url.com/counter";
+
+function updateDisplay(n) {
+  document.getElementById('count-display').textContent = n;
+}
+
+function showError(msg) {
+  document.getElementById('count-error').textContent = msg;
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  fetch(COUNTER_API)
+    .then(res => res.json())
+    .then(data => updateDisplay(data.count))
+    .catch(() => updateDisplay("Error"));
+
+  document.getElementById('increment-btn').addEventListener('click', function() {
+    fetch(COUNTER_API, { method: "POST" })
+      .then(res => res.json())
+      .then(data => updateDisplay(data.count))
+      .catch(() => showError("Failed to increment"));
+  });
+});
