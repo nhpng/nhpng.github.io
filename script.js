@@ -1,8 +1,7 @@
-// Website Counter using countapi.xyz
-const NAMESPACE = "northern-lights-consulting-demo"; // Change to something unique if you want!
+const NAMESPACE = "northern-lights-consulting-demo";
 const KEY = "site-counter";
+const BASE = "https://api.countapi.dev";
 
-// Counter logic
 function updateDisplay(n) {
   const el = document.getElementById('count-display');
   if (el) el.textContent = n;
@@ -13,19 +12,16 @@ function showError(msg) {
 }
 
 document.addEventListener('DOMContentLoaded', function() {
-  // Counter fetch
-  const display = document.getElementById('count-display');
-  const btn = document.getElementById('increment-btn');
   // Get current count
-  fetch(`https://api.countapi.xyz/get/${NAMESPACE}/${KEY}`)
+  fetch(`${BASE}/get/${NAMESPACE}/${KEY}`)
     .then(res => res.json())
     .then(data => updateDisplay(data.value))
-    .catch(() => updateDisplay("Error"));
+    .catch(() => showError("Error"));
 
-  // Increment on button click
+  const btn = document.getElementById('increment-btn');
   if (btn) {
     btn.addEventListener('click', function() {
-      fetch(`https://api.countapi.xyz/update/${NAMESPACE}/${KEY}/?amount=1`)
+      fetch(`${BASE}/hit/${NAMESPACE}/${KEY}`)
         .then(res => res.json())
         .then(data => updateDisplay(data.value))
         .catch(() => showError("Failed to increment"));
