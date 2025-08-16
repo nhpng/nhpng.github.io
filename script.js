@@ -1,4 +1,3 @@
-// Show a thank you message after form submission
 document.addEventListener('DOMContentLoaded', function() {
   const form = document.getElementById('contact-form');
   const formMsg = document.getElementById('form-message');
