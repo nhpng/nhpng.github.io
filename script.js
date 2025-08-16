@@ -1,6 +1,4 @@
-const NAMESPACE = "northern-lights-consulting-demo";
-const KEY = "site-counter";
-const BASE = "https://api.countapi.dev";
+const COUNTER_API = "https://YOUR_WORKER_SUBDOMAIN.workers.dev/counter"; // Replace later!
 
 function updateDisplay(n) {
   const el = document.getElementById('count-display');
@@ -12,31 +10,18 @@ function showError(msg) {
 }
 
 document.addEventListener('DOMContentLoaded', function() {
-  // Get current count
-  fetch(`${BASE}/get/${NAMESPACE}/${KEY}`)
+  fetch(COUNTER_API)
     .then(res => res.json())
-    .then(data => updateDisplay(data.value))
+    .then(data => updateDisplay(data.count))
     .catch(() => showError("Error"));
 
   const btn = document.getElementById('increment-btn');
   if (btn) {
     btn.addEventListener('click', function() {
-      fetch(`${BASE}/hit/${NAMESPACE}/${KEY}`)
+      fetch(COUNTER_API, { method: "POST" })
         .then(res => res.json())
-        .then(data => updateDisplay(data.value))
+        .then(data => updateDisplay(data.count))
         .catch(() => showError("Failed to increment"));
-    });
-  }
-
-  // Contact form thank you message
-  const form = document.getElementById('contact-form');
-  const formMsg = document.getElementById('form-message');
-  if(form) {
-    form.addEventListener('submit', function() {
-      setTimeout(() => {
-        formMsg.textContent = "Thank you for your message! We'll be in touch soon.";
-        formMsg.style.color = "#30475e";
-      }, 800);
     });
   }
 });
