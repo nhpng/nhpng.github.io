@@ -1,4 +1,4 @@
-const COUNTER_API = "https://YOUR_WORKER_SUBDOMAIN.workers.dev/counter"; // Replace later!
+const COUNTER_API = "https://bold-frog-576d.nhpng1.workers.dev/counter"; // Replace later!
 
 function updateDisplay(n) {
   const el = document.getElementById('count-display');
