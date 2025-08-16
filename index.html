@@ -2,23 +2,77 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Contact Form Test</title>
+  <title>Northern Lights Consulting</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <h2>Contact Us</h2>
-  <form action="https://formspree.io/f/xdkdvkrr" method="POST">
-    <input type="hidden" name="_captcha" value="false">
-    <label>Your Name:<br>
-      <input type="text" name="name" required>
-    </label><br>
-    <label>Your Email:<br>
-      <input type="email" name="email" required>
-    </label><br>
-    <label>Your Message:<br>
-      <textarea name="message" required></textarea>
-    </label><br>
-    <button type="submit">Send Message</button>
-  </form>
-  <p>After submitting, you should see a thank-you page.</p>
+  <header>
+    <nav>
+      <div class="logo">Northern Lights Consulting</div>
+      <ul>
+        <li><a href="#home">Home</a></li>
+        <li><a href="#about">About</a></li>
+        <li><a href="#services">Services</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </nav>
+    <section id="home" class="hero">
+      <div class="hero-content">
+        <h1>Guiding Your Business to Success</h1>
+        <p>Strategic consulting for a brighter future.</p>
+        <a href="#contact" class="cta-button">Get in Touch</a>
+      </div>
+    </section>
+  </header>
+  <main>
+    <section id="about" class="section">
+      <h2>About Us</h2>
+      <p>
+        Northern Lights Consulting is dedicated to helping organizations reach their full potential. With years of experience in business strategy, operations, and technology, our team provides tailored solutions to meet your unique challenges.
+      </p>
+    </section>
+
+    <section id="services" class="section">
+      <h2>Our Services</h2>
+      <ul class="service-list">
+        <li>
+          <h3>Business Strategy</h3>
+          <p>We help you define your vision and build a plan for sustainable growth.</p>
+        </li>
+        <li>
+          <h3>Technology Consulting</h3>
+          <p>Modernize your technology stack and streamline your operations.</p>
+        </li>
+        <li>
+          <h3>Change Management</h3>
+          <p>Guidance for smooth transitions and organizational transformation.</p>
+        </li>
+      </ul>
+    </section>
+
+    <section id="contact" class="section">
+      <h2>Contact Us</h2>
+      <!-- Using Formsubmit to email nhpng1@gmail.com -->
+      <form id="contact-form" action="https://formsubmit.co/nhpng1@gmail.com" method="POST">
+        <input type="hidden" name="_captcha" value="false">
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" required>
+
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" required>
+
+        <label for="message">Message:</label>
+        <textarea id="message" name="message" rows="5" required></textarea>
+
+        <button type="submit">Send Message</button>
+      </form>
+      <div id="form-message"></div>
+    </section>
+  </main>
+  <footer>
+    <p>&copy; 2025 Northern Lights Consulting. All rights reserved.</p>
+  </footer>
+  <script src="script.js"></script>
 </body>
 </html>
