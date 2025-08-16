@@ -5,9 +5,26 @@ document.addEventListener('DOMContentLoaded', function() {
     if(form) {
         form.addEventListener('submit', function(e) {
             e.preventDefault();
-            formMsg.textContent = "Thank you for your message! We'll be in touch soon.";
-            formMsg.style.color = "#30475e";
-            form.reset();
+            const data = new FormData(form);
+            fetch(form.action, {
+                method: form.method,
+                body: data,
+                headers: {
+                    'Accept': 'application/json'
+                }
+            }).then(response => {
+                if (response.ok) {
+                    formMsg.textContent = "Thank you for your message! We'll be in touch soon.";
+                    formMsg.style.color = "#30475e";
+                    form.reset();
+                } else {
+                    formMsg.textContent = "Oops! There was a problem submitting your form.";
+                    formMsg.style.color = "red";
+                }
+            }).catch(() => {
+                formMsg.textContent = "Oops! There was a problem submitting your form.";
+                formMsg.style.color = "red";
+            });
         });
     }
 });
