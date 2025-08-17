@@ -1,58 +1,159 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Global Counter</title>
-  <style>
-    body { display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; font-family: sans-serif; background: #f5f5f5; }
-    .card { text-align: center; background: white; padding: 2rem; border-radius: 1rem; box-shadow: 0 4px 12px rgba(0,0,0,.1); }
-    .count { font-size: 3rem; margin-bottom: 1rem; }
-    button { font-size: 1.2rem; padding: 1rem 2rem; border: none; border-radius: 0.5rem; background: #4F46E5; color: white; cursor: pointer; }
-    button:active { transform: translateY(1px); }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Global Firebase Counter</title>
+    
+    <!-- Basic Styling for your counter page -->
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            text-align: center;
+            margin-top: 60px;
+            background-color: #f0f2f5;
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: calc(100vh - 120px); /* Adjust for margin */
+        }
+        h1 {
+            color: #2c3e50;
+            margin-bottom: 30px;
+        }
+        #counterDisplay {
+            font-size: 6em; /* Make the number really big! */
+            font-weight: bold;
+            color: #4CAF50; /* A nice green color */
+            margin-bottom: 40px;
+            padding: 20px 40px;
+            background-color: #ffffff;
+            border-radius: 15px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+            min-width: 200px;
+            display: inline-block;
+        }
+        button {
+            padding: 22px 45px;
+            font-size: 2.2em; /* Big, clickable button */
+            cursor: pointer;
+            background-color: #007bff; /* A vibrant blue */
+            color: white;
+            border: none;
+            border-radius: 12px;
+            transition: background-color 0.3s ease, transform 0.1s ease;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            outline: none; /* Remove outline on focus */
+        }
+        button:hover {
+            background-color: #0056b3; /* Darker blue on hover */
+            transform: translateY(-2px); /* Slight lift effect */
+        }
+        button:active {
+            background-color: #004085; /* Even darker on click */
+            transform: translateY(0);
+        }
+        p.note {
+            margin-top: 30px;
+            font-size: 0.9em;
+            color: #666;
+        }
+    </style>
 </head>
 <body>
-  <div class="card">
-    <div class="count" id="count">0</div>
-    <button id="btn">Click to add 1</button>
-    <p style="opacity:0.7; font-size:0.9rem">This counter is shared by everyone.</p>
-  </div>
+    <h1>The Global Click Counter!</h1>
+    <div id="counterDisplay">Loading...</div>
+    <button id="clickButton">Click Me to Increase!</button>
+    <p class="note">Everyone in the world shares this one number!</p>
 
-  <!-- Firebase SDKs for browsers -->
-  <script src="https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js"></script>
+    <!--
+        STEP 1: Import Firebase SDKs
+        These scripts load the necessary Firebase libraries from Google's servers.
+        We need 'firebase-app-compat.js' for the core Firebase functionality,
+        and 'firebase-database-compat.js' specifically for Realtime Database.
+    -->
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
 
-  <script>
-    // Your Firebase config
-    const firebaseConfig = {
-      apiKey: "AIzaSyBvlr-8lQY-iecU6VUKuoXVR9SFUHHrBfY",
-      authDomain: "counter-test-8bbce.firebaseapp.com",
-      databaseURL: "https://counter-test-8bbce-default-rtdb.firebaseio.com",
-      projectId: "counter-test-8bbce",
-      storageBucket: "counter-test-8bbce.firebasestorage.app",
-      messagingSenderId: "802598917045",
-      appId: "1:802598917045:web:5e1fa79a63bfb0025efffc"
-    };
+    <!--
+        STEP 2: Your Firebase Project Configuration
+        PASTE YOUR ENTIRE `firebaseConfig` OBJECT HERE.
+        You obtained this from the Firebase Console when you registered your web app.
+        It should look exactly like the example below, but with YOUR project's unique values.
+        DO NOT use the placeholder values below, replace them with your actual config!
+    -->
+    <script>
+        const firebaseConfig = {
+          apiKey: "AIzaSyBvlr-8lQY-iecU6VUKuoXVR9SFUHHrBfY",
+          authDomain: "counter-test-8bbce.firebaseapp.com",
+          databaseURL: "https://counter-test-8bbce-default-rtdb.firebaseio.com",
+          projectId: "counter-test-8bbce",
+          storageBucket: "counter-test-8bbce.firebasestorage.app",
+          messagingSenderId: "802598917045",
+          appId: "1:802598917045:web:4603486c85ba9afd5efffc"
+        };
 
-    // Initialize Firebase
-    firebase.initializeApp(firebaseConfig);
-    const db = firebase.database();
-    const counterRef = db.ref("globalCounter");
+        // Initialize Firebase with your project's configuration
+        firebase.initializeApp(firebaseConfig);
+    </script>
 
-    const countEl = document.getElementById("count");
-    const btn = document.getElementById("btn");
+    <!--
+        STEP 3: Your Custom JavaScript Logic for the Counter
+        This script connects to the Realtime Database, reads the counter,
+        updates it when the button is clicked, and listens for real-time changes.
+    -->
+    <script>
+        // Get a reference to the Realtime Database service
+        const database = firebase.database();
 
-    // Listen for real-time updates
-    counterRef.on("value", snapshot => {
-      const val = snapshot.val();
-      countEl.textContent = val ?? 0;
-    });
+        // Get a reference to the 'counter' path in your database.
+        // This is where our single global number will be stored.
+        const counterRef = database.ref('counter');
 
-    // Increment counter when clicked
-    btn.addEventListener("click", () => {
-      counterRef.transaction(current => (current || 0) + 1);
-    });
-  </script>
+        // Get the HTML elements we need to interact with
+        const counterDisplay = document.getElementById('counterDisplay');
+        const clickButton = document.getElementById('clickButton');
+
+        // --- Real-time Listener ---
+        // This function will run every time the 'counter' value changes in the database.
+        // This is the magic that makes it real-time across all users!
+        counterRef.on('value', (snapshot) => {
+            const currentCount = snapshot.val(); // Get the current value from the database
+            counterDisplay.textContent = currentCount; // Update the number shown on the webpage
+            console.log("Counter updated to:", currentCount); // Log to browser console
+        });
+
+        // --- Button Click Event ---
+        // When the 'Click Me' button is pressed, we'll increment the counter.
+        clickButton.addEventListener('click', () => {
+            // Use a Firebase transaction to safely increment the counter.
+            // This is crucial for shared counters: it ensures that if multiple people
+            // click at nearly the same time, the counter increments correctly
+            // without overwriting each other's changes.
+            counterRef.transaction((currentData) => {
+                if (currentData === null) {
+                    // If the 'counter' path doesn't exist yet (e.g., first ever click),
+                    // start it at 1.
+                    console.log("Initializing counter to 1.");
+                    return 1;
+                } else {
+                    // Otherwise, increment the current number by 1.
+                    console.log("Incrementing counter from", currentData, "to", currentData + 1);
+                    return currentData + 1;
+                }
+            }, (error, committed, snapshot) => {
+                if (error) {
+                    console.error("Transaction failed: ", error);
+                } else if (!committed) {
+                    console.warn("Transaction not committed (another client updated the data). Retrying automatically.");
+                } else {
+                    console.log("Counter incremented successfully!");
+                }
+            });
+        });
+    </script>
 </body>
 </html>
+
