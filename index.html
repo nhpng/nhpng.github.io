@@ -24,7 +24,7 @@
   <script src="https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js"></script>
 
   <script>
-    // Your Firebase configuration (classic browser style)
+    // Firebase config for your project
     const firebaseConfig = {
       apiKey: "AIzaSyBvlr-8lQY-iecU6VUKuoXVR9SFUHHrBfY",
       authDomain: "counter-test-8bbce.firebaseapp.com",
@@ -42,7 +42,7 @@
     const countEl = document.getElementById("count");
     const btn = document.getElementById("btn");
 
-    // Reference to the counter in your Realtime Database
+    // Reference to the counter in the database
     const counterRef = db.ref("globalCounter");
 
     // Listen for real-time updates
